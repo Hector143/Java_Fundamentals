@@ -1,0 +1,85 @@
+import java.util.Scanner;
+ 
+ 
+public class Temperature_Tracker_Program {
+	public static void main(String[] args){
+		Scanner scan = new Scanner(System.in);
+		
+		System.out.println("-----------------------------------------");
+		System.out.println("      TEMPERATURE TRACKER REPORT");
+		System.out.println("-----------------------------------------\n\n");
+		
+		System.out.print("Enter number of days to record: ");
+		int num = scan.nextInt();
+		scan.nextLine();
+		System.out.println();
+		double[] tempValue = new double[num];
+		
+		for (int i = 0; i < num; i++) {
+			System.out.print("Enter temperature for Day " + (i+1) + ": ");
+			tempValue[i] = scan.nextDouble();
+ 
+ 
+		}
+		
+		// getting the temperature string per tempValue
+		String[] temp = new String[num];
+		for (int i = 0; i < num; i++) {
+			if (tempValue[i] >= 35) {
+				temp[i] = "Very Hot";
+			} else if(tempValue[i] >= 30) {
+				temp[i] = "Hot";
+			} else if(tempValue[i] >= 25) {
+				temp[i] = "Warm";
+			} else {
+				temp[i] = "Cold";
+			}
+		}
+		
+		// Getting the highest temperature
+		double highestTemp = 0;
+		for (int i = 0; i < num; i++) {
+			if (tempValue[i] > highestTemp) {
+				highestTemp = tempValue[i];
+			}
+		}
+		
+		// Getting the lowest temperature
+		double lowestTemp = tempValue[0];
+		for (int i = 0; i < num; i++) {
+			if (tempValue[i] < lowestTemp) {
+				lowestTemp = tempValue[i];
+			}
+		}
+		
+		// Getting the Average temperature
+		
+		double sum = 0;
+		double averageTemp = 0;
+		for (int i = 0; i < num; i++) {
+			sum += tempValue[i];
+			
+		}
+		averageTemp = sum / num;
+		
+		System.out.println("\n\n-----------------------------------------");
+		System.out.println("         DAILY TEMPERATURE SUMMARY");
+		System.out.println("-----------------------------------------");
+		
+		for (int i = 0; i < num; i++) {
+			System.out.printf("Day %d: %.1f°C  ->  %s%n", (i+1), tempValue[i], temp[i]);
+			
+		}
+		
+		System.out.println("\n\n-----------------------------------------");
+		System.out.println("         STATISTICAL RESULTS");
+		System.out.println("-----------------------------------------");
+		System.out.printf("Highest Temperature : %.1f°C%n", highestTemp);
+		System.out.printf("Lowest Temperature  : %.1f°C%n", lowestTemp);
+		System.out.printf("Average Temperature : %.2f°C%n", averageTemp);
+		System.out.println("\n\n-----------------------------------------");
+		System.out.println("              END OF REPORT");
+		System.out.println("-----------------------------------------");
+		scan.close();
+	}
+}

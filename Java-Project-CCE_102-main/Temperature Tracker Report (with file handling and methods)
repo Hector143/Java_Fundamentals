@@ -1,0 +1,143 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.util.Scanner;
+ 
+ 
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        File file = new File("report.txt");
+ 
+ 
+        initFile(file);
+ 
+ 
+        double max = 0;
+        double min = 1000;
+        double total = 0;
+ 
+ 
+        System.out.println(divider("TEMPERATURE TRACKER REPORT"));
+ 
+ 
+        System.out.print("Enter the number of days to record: ");
+        int days = sc.nextInt();
+ 
+ 
+        sc.nextLine();
+ 
+ 
+        double[] temps = temps(sc, days);
+ 
+ 
+        saveToFile(file, divider("DAILY TEMPERATURE SUMMARY"));
+ 
+ 
+        for (int i = 0; i < temps.length; i++) {
+            saveToFile(file, "Day " + (i + 1) + ": " + String.format("%.1f", temps[i]) + "°C -> " + desc(temps[i]));
+ 
+ 
+            max = Math.max(max, temps[i]);
+            min = Math.min(min, temps[i]);
+            total += temps[i];
+        }
+ 
+ 
+        saveToFile(file, divider("STATISTICAL RESULTS"));
+ 
+ 
+        saveToFile(file, stats(min, max, total, days));
+ 
+ 
+        saveToFile(file, divider("END OF REPORT"));
+ 
+ 
+        display(file);
+    }
+ 
+ 
+    public static void initFile(File file) {
+        try {
+            if (!file.exists()) {
+                file.createNewFile();
+                System.out.println("File Created!");
+            }
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+        }
+    }
+ 
+ 
+    public static void saveToFile(File file, String s) {
+        try {
+            FileWriter writer = new FileWriter(file, true);
+            writer.write(s + "\n");
+            writer.close();
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println("Error: " + e);
+        }
+    }
+ 
+ 
+    public static void display(File file) {
+        try {
+            Scanner output = new Scanner(file);
+ 
+ 
+            while (output.hasNextLine()) {
+                System.out.println(output.nextLine());
+            }
+            output.close();
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+        }
+ 
+ 
+    }
+ 
+ 
+    public static double[] temps(Scanner sc, int days) {
+        double[] temps = new double[days];
+ 
+ 
+        for (int i = 0; i < temps.length; i++) {
+            System.out.printf("Enter Temeperature for Day %d: ", (i + 1));
+            temps[i] = sc.nextDouble();
+        }
+ 
+ 
+        return temps;
+    }
+ 
+ 
+    public static String desc(double temp) {
+        if (temp >= 35) {
+            return "Very Hot";
+        } else if (temp >= 30) {
+            return "Hot";
+        } else if (temp >= 25) {
+            return "Warm";
+        } else {
+            return "Cold";
+        }
+ 
+ 
+    }
+ 
+ 
+    public static String stats(double min, double max, double total, int days) {
+        return "Highest Temperature: " + String.format("%.1f", max) + "°C\nLowest Temperature: "
+                + String.format("%.1f", min) + "°C\nAverage Temperature: " + String.format("%.1f", (total / days))
+                + "°C";
+    }
+ 
+ 
+    public static String divider(String title) {
+        String format = "-----------------------------------------\n      " + title
+                + "\n-----------------------------------------";
+        return format;
+    }
+ 
+ 
+}
